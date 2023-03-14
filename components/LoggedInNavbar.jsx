@@ -1,11 +1,22 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
   const [color, setColor] = useState("transparent");
   const [textColor, setTextColor] = useState("white");
+  const router = useRouter();
+
+  async function handleLogout() {
+    const response = await axios.post("/api/logout");
+
+    if (response?.data) {
+      await router.push("/");
+    }
+  }
 
   const handleNav = () => {
     setNav(!nav);
@@ -30,19 +41,23 @@ export default function Navbar() {
       className="fixed left-0 top-0 w-full z-10 ease-in duration-300"
     >
       <div className="max-w-[1240px] m-auto flex justify-between items-center p-4 text-white">
-        <h1 style={{ color: `${textColor}` }} className="font-bold text-4xl">
-          WriteMind
-        </h1>
+        <>
+          <h1 style={{ color: `${textColor}` }} className="font-bold text-4xl">
+            WriteMind
+          </h1>
+          <ul style={{ color: `${textColor}` }} className="hidden sm:flex">
+            <li className="p-4">
+              <Link href="/blog">Blog</Link>
+            </li>
+            <li className="p-4">
+              <Link href="/create">Create</Link>
+            </li>
 
-        <ul style={{ color: `${textColor}` }} className="hidden sm:flex">
-          <li className="p-4">
-            <Link href="/">Home</Link>
-          </li>
-          <li className="p-4">
-            <Link href="/about">About Us</Link>
-          </li>
-        </ul>
-
+            <button onClick={handleLogout} className="p-4">
+              Logout
+            </button>
+          </ul>
+        </>
         {/* Mobile Button */}
         <div onClick={handleNav} className="block sm:hidden z-10">
           {nav ? (
@@ -65,14 +80,21 @@ export default function Navbar() {
                 onClick={handleNav}
                 className="p-4 text-4xl hover:text-gray-500"
               >
-                <Link href="/">Home</Link>
+                <Link href="/blog">Blog</Link>
               </li>
               <li
                 onClick={handleNav}
                 className="p-4 text-4xl hover:text-gray-500"
               >
-                <Link href="/about">About Us</Link>
+                <Link href="/create">Create</Link>
               </li>
+
+              <button
+                onClick={handleLogout}
+                className="p-4 text-4xl hover:text-gray-500"
+              >
+                Logout
+              </button>
             </ul>
           </>
         </div>

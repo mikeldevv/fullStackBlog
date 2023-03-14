@@ -1,9 +1,10 @@
 import React from "react";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 
 const PrivatePage = () => {
   return (
     <div>
-      <p>This is a private page you logged in successfully</p>
+      <LoggedInNavbar />
     </div>
   );
 };
